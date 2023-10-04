@@ -12,7 +12,7 @@ class VerbosityMeter:
     def __init__(self) -> None:
         self.WINDOW = ctk.CTk()
         self.WINDOW.title("VerbosityMeter")
-        self.WINDOW.geometry('540x384')
+        self.WINDOW.geometry('425x384')
 
         self.label = ctk.CTkTextbox(
             master=self.WINDOW,
@@ -22,28 +22,24 @@ class VerbosityMeter:
         )
 
         self.label.insert(tk.END, "Choose a file so that the program counts the most common words")
-        print(
-            ctk.CTkFont().measure("Choose a file so that the program counts the most common words")
-        )
         self.label.configure(
             state='disabled',
-            width=ctk.CTkFont().measure("Choose a file so that the program counts the most common words") + 45,
-            # width=len(self.label.get("0.0", tk.END)) * 6,
+            width=ctk.CTkFont().measure("Choose a file so that the program counts the most common words") + 41,
             height=10,
         )
 
         self.button = ctk.CTkButton(
             master=self.WINDOW,
             text="Open File...",
-            command=self.count_words
+            command=self.count_words,
+            height=60
         )
 
-        self.label.pack(anchor=tk.N)
-        self.button.pack(anchor=tk.N, pady=20, expand=True)
+        self.label.pack()
 
+        self.button.pack(anchor=tk.N, pady=30)
 
     def set_table(self, data: pd.DataFrame):
-        print(f'{data.to_string()!r}')
 
         try:
             self.table_frame.destroy()
@@ -52,18 +48,20 @@ class VerbosityMeter:
 
         self.table_frame = ctk.CTkFrame(self.WINDOW)
         self.table_frame.pack(
-            anchor=tk.N,
-            pady=20,
-            expand=True
+            anchor=tk.CENTER,
         )
-        self.table = pdt.Table(self.table_frame, dataframe=data)
+        self.table = pdt.Table(
+            self.table_frame,
+            dataframe=data,
+            editable=False,
+        )
         self.table.show()
-        # self.table.redraw()
 
     def get_filepath():
         filepath = filedialog.askopenfilename(
             initialdir=expanduser("~"),
             title="Select a File.",
+            filetypes=[('Text Files', '.txt'), ('Any Files', '*')]
         )
         return filepath
 
@@ -74,14 +72,14 @@ class VerbosityMeter:
         word_counter = Counter()
         with open(filepath) as textfile:
             for line in textfile:
-                words = re.findall(r'[a-zA-Z]', line.upper())
+                words = re.findall(r'[a-zA-Z]+', line.upper())
                 word_counter.update(words)
 
         most_common_words = word_counter.most_common(10)
         data = pd.DataFrame(
             most_common_words,
             columns=['Word', 'Frequency']
-        ).set_index('Word')
+        )
 
         self.set_table(data)
 
