@@ -11,7 +11,6 @@ class GUI:
         self.setup_menubar()
         self.setup_main_interface()
         self.dark_theme()
-        self.table = None
 
     def setup_WINDOW(self):
         # WINDOW
@@ -84,7 +83,8 @@ class GUI:
         # Dataframe Frame
         self.table_frame = ctk.CTkFrame(
             master=self.WINDOW,
-            height=290
+            width=500,
+            height=300
         )
         self.table_frame.pack(anchor=tk.CENTER)
 
@@ -93,21 +93,47 @@ class GUI:
             self.WINDOW,
             command=self.toggle_themes,
             text='Dark',
-            # font=ctk.CTkFont(size=16),
             switch_width=50,
             switch_height=25
         )
         self.switch.pack(anchor=tk.SW, ipady=30, padx=50)
 
     def render_table(self):
+        try:
+            self.data
+        except AttributeError:
+            return
         self.table = pdt.Table(
-            self.table_frame,
+            parent=self.table_frame,
             dataframe=self.data,
+            cellbackgr='#212121',
+            textcolor='white',
+            rowselectedcolor='black',
             editable=False,
-            width=250,
-            confine=True
+            columns=2,
+            cellwidth=200,
+            rowheight=25,
+            width=420,
+            height=250,
         )
+        self.table.boxoutlinecolor='grey'
+        self.table.grid_color = 'grey'
         self.table.show()
+
+        self.table.rowheader.bgcolor = '#212121'
+        self.table.rowheader.textcolor = 'white'
+        self.table.colheader.bgcolor = '#212121'
+        self.table.colheader.textcolor = 'white'
+
+        if not ctk.AppearanceModeTracker.get_mode():
+            self.table.textcolor = 'black'
+            self.table.cellbackgr = 'lightgray',
+            self.table.rowheader.bgcolor = 'lightgray'
+            self.table.rowheader.textcolor = 'black'
+            self.table.colheader.bgcolor = 'lightgray'
+            self.table.colheader.textcolor = 'black'
+            self.table.rowselectedcolor='white',
+
 
     def open_online_documentation(self):
         webbrowser.open("https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md")
@@ -163,11 +189,13 @@ in text files through an intuitive Tkinter interface."""
             self.file_menubar,
             self.view_menubar,
             self.view_theme_menubar,
-            self.help_menubar_menu
+            self.help_menubar_menu,
         ]
 
         for element in menubar_elements:
             element.configure(bg="black", fg="white")
+
+        self.render_table()
 
     # Change program theme to Light
     def light_theme(self):
@@ -178,11 +206,13 @@ in text files through an intuitive Tkinter interface."""
             self.file_menubar,
             self.view_menubar,
             self.view_theme_menubar,
-            self.help_menubar_menu
+            self.help_menubar_menu,
         ]
 
         for element in menubar_elements:
             element.configure(bg="white", fg="black")
+
+        self.render_table()
 
     def toggle_menubar(self, *args):
         if self.menubar.winfo_exists():
@@ -194,7 +224,6 @@ in text files through an intuitive Tkinter interface."""
             self.dark_theme()
         else:
             self.light_theme()
-
 
     def toggle_themes(self):
         if ctk.AppearanceModeTracker.appearance_mode:

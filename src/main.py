@@ -1,9 +1,5 @@
 # TO-DO
-#     Improve GUI (
-#         table Width
-#         Theme Switch
-#         About page
-#     )
+
 #     Error notification (
 #
 #     )
