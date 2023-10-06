@@ -19,14 +19,14 @@ class GUI:
         self.WINDOW = ctk.CTk()
         self.WINDOW.title("VerbosityMeter")
         self.WINDOW.geometry("425x384")
+        self.WINDOW.bind("<Alt_L>", self.toggle_menubar)
         iconpng = tk.PhotoImage(file="../assets/icons/icon256x256.png")
         self.WINDOW.iconphoto(False, iconpng)
 
     def setup_menubar(self):
         # MENUBAR
-        self.menubar = tk.Menu(self.WINDOW, tearoff=False, bd=0)
+        self.menubar = tk.Menu(self.WINDOW, bd=0)
         self.WINDOW.config(menu=self.menubar)
-        self.WINDOW.bind("<Alt_L>", self.toggle_menubar)
 
         # FILE
         self.file_menubar = tk.Menu(self.menubar, tearoff=False)
@@ -142,7 +142,7 @@ in text files through an intuitive Tkinter interface."""
         )
         self.about_desc.pack()
 
-# Pop-ups to send messages to the user
+    # Pop-ups to send messages to the user
     def popup(self, type, message):
         colors = {
             "error": "#FF0000",  # Red
@@ -152,7 +152,7 @@ in text files through an intuitive Tkinter interface."""
 
         pass
 
-# Change program theme to Dark
+    # Change program theme to Dark
     def dark_theme(self):
         ctk.set_appearance_mode("dark")
 
@@ -170,7 +170,7 @@ in text files through an intuitive Tkinter interface."""
                 fg="white"
             )
 
-# Change program theme to Light
+    # Change program theme to Light
     def light_theme(self):
         ctk.set_appearance_mode("light")
 
@@ -191,6 +191,7 @@ in text files through an intuitive Tkinter interface."""
     def toggle_menubar(self, *args):
         if self.menubar.winfo_exists():
             self.menubar.destroy()
+            self.WINDOW.config(menu=tk.Label())
         else:
             self.setup_menubar()
 

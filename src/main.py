@@ -1,7 +1,5 @@
 # TO-DO
 #     Improve GUI (
-#         ToolBar
-#         Menubar ->Accelerator(hide, show, menubar)
 #         Theme Switch
 #         About page
 #     )
