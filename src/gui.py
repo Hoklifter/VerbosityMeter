@@ -11,22 +11,22 @@ class GUI:
         self.setup_menubar()
         self.setup_main_interface()
         self.dark_theme()
-        self.table_frame = None
         self.table = None
 
     def setup_WINDOW(self):
         # WINDOW
         self.WINDOW = ctk.CTk()
-        self.WINDOW.title("VerbosityMeter")
-        self.WINDOW.geometry("425x384")
-        self.WINDOW.bind("<Alt_L>", self.toggle_menubar)
         iconpng = tk.PhotoImage(file="../assets/icons/icon256x256.png")
+        self.WINDOW.title("VerbosityMeter")
+        self.WINDOW.geometry("600x550")
+        self.WINDOW.resizable(False, False)
         self.WINDOW.iconphoto(False, iconpng)
+        self.WINDOW.bind("<Alt_L>", self.toggle_menubar)
+        self.WINDOW.attributes('-topmost', 1)
 
     def setup_menubar(self):
         # MENUBAR
         self.menubar = tk.Menu(self.WINDOW, bd=0)
-        self.WINDOW.config(menu=self.menubar)
 
         # FILE
         self.file_menubar = tk.Menu(self.menubar, tearoff=False)
@@ -45,7 +45,7 @@ class GUI:
 
 
         # HELP
-        self.help_menubar_menu = tk.Menu(self.menubar,tearoff=False        )
+        self.help_menubar_menu = tk.Menu(self.menubar,tearoff=False)
         self.help_menubar_menu.add_command(label="Documentation", command=self.open_online_documentation)
         self.help_menubar_menu.add_command(label="About", command=self.create_about)
 
@@ -53,6 +53,8 @@ class GUI:
         self.menubar.add_cascade(label="File", menu=self.file_menubar)
         self.menubar.add_cascade(label="View", menu=self.view_menubar)
         self.menubar.add_cascade(label="Help", menu=self.help_menubar_menu)
+
+        self.WINDOW.config(menu=self.menubar)
 
     def setup_main_interface(self):
         # Title
@@ -62,12 +64,10 @@ class GUI:
             wrap=tk.NONE,
             font=(None, 12)
         )
-        self.label.insert(
-            tk.END, "Choose a file so that the program counts the most common words")
+        self.label.insert(tk.END, "Choose a file so that the program counts the most common words")
         self.label.configure(
             state="disabled",
-            width=ctk.CTkFont().measure(
-                "Choose a file so that the program counts the most common words") + 41,
+            width=ctk.CTkFont().measure("Choose a file so that the program counts the most common words") + 41,
             height=10,
         )
         self.label.pack()
@@ -81,27 +81,36 @@ class GUI:
         )
         self.button.pack(anchor=tk.N, pady=30)
 
-    def render_table(self):
-        if self.table_frame:
-            self.table_frame.destroy()
-            self.table.destroy()
-
-        self.table_frame = ctk.CTkFrame(self.WINDOW)
-        self.table_frame.pack(
-            anchor=tk.CENTER,
+        # Dataframe Frame
+        self.table_frame = ctk.CTkFrame(
+            master=self.WINDOW,
+            height=290
         )
+        self.table_frame.pack(anchor=tk.CENTER)
+
+        # Theme Switch
+        self.switch = ctk.CTkSwitch(
+            self.WINDOW,
+            command=self.toggle_themes,
+            text='Dark',
+            # font=ctk.CTkFont(size=16),
+            switch_width=50,
+            switch_height=25
+        )
+        self.switch.pack(anchor=tk.SW, ipady=30, padx=50)
+
+    def render_table(self):
         self.table = pdt.Table(
             self.table_frame,
             dataframe=self.data,
             editable=False,
-            rows=10,
-            cols=2
+            width=250,
+            confine=True
         )
         self.table.show()
 
     def open_online_documentation(self):
-        webbrowser.open(
-            "https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md")
+        webbrowser.open("https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md")
 
     def create_about(self):
         self.about_window = ctk.CTkToplevel(master=self.WINDOW)
@@ -112,11 +121,7 @@ class GUI:
 
         self.about_img = ctk.CTkLabel(
             self.about_window,
-            image=ctk.CTkImage(
-                PIL.Image.open("../assets/icons/icon2048x2048.png"),
-                None,
-                (150, 150)
-            ),
+            image=ctk.CTkImage(PIL.Image.open("../assets/icons/icon2048x2048.png"), None, (150, 150)),
             text="",
             height=170
         )
@@ -129,10 +134,7 @@ class GUI:
         )
         self.about_title.pack()
 
-        self.about_version = ctk.CTkLabel(
-            self.about_window,
-            text="1.0.0"
-        )
+        self.about_version = ctk.CTkLabel(self.about_window, text="1.0.0")
         self.about_version.pack()
 
         self.about_desc = ctk.CTkLabel(
@@ -165,10 +167,7 @@ in text files through an intuitive Tkinter interface."""
         ]
 
         for element in menubar_elements:
-            element.config(
-                bg="black",
-                fg="white"
-            )
+            element.configure(bg="black", fg="white")
 
     # Change program theme to Light
     def light_theme(self):
@@ -183,15 +182,11 @@ in text files through an intuitive Tkinter interface."""
         ]
 
         for element in menubar_elements:
-            element.config(
-                bg="white",
-                fg="black"
-            )
+            element.configure(bg="white", fg="black")
 
     def toggle_menubar(self, *args):
         if self.menubar.winfo_exists():
             self.menubar.destroy()
-            self.WINDOW.config(menu=tk.Label())
         else:
             self.setup_menubar()
 
@@ -199,3 +194,12 @@ in text files through an intuitive Tkinter interface."""
             self.dark_theme()
         else:
             self.light_theme()
+
+
+    def toggle_themes(self):
+        if ctk.AppearanceModeTracker.appearance_mode:
+            self.light_theme()
+            self.switch.configure(text='Light')
+        else:
+            self.dark_theme()
+            self.switch.configure(text='Dark')

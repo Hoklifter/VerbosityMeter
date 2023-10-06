@@ -1,5 +1,6 @@
 # TO-DO
 #     Improve GUI (
+#         table Width
 #         Theme Switch
 #         About page
 #     )
@@ -9,11 +10,6 @@
 #     User input RegEx (
 #
 #     )
-#
-#     TO-DO
-#     TO-DO
-#     TO-DO
-#     TO-DO
 
 from gui import GUI
 from fun import FUN
