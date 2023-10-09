@@ -95,8 +95,18 @@ class GUI:
             switch_width=50,
             switch_height=25
         )
-        self.switch.place(anchor=tk.N, relx=.16, rely=.85)
+        self.switch.place(anchor=tk.N, relx=.16, rely=.82)
 
+        # RegEx Entry button
+        self.regex_button = ctk.CTkButton(
+            master=self.WINDOW,
+            text="RegEx...",
+            command=self.create_regex_entry,
+            height=30
+        )
+        self.regex_button.place(anchor=tk.W, relx=0.3, rely=0.84)
+
+    # Renders DataFrame Table
     def render_table(self):
         try:
             self.data
@@ -110,7 +120,6 @@ class GUI:
             textcolor='white',
             rowselectedcolor='black',
             editable=False,
-            columns=2,
             cellwidth=200,
             rowheight=25,
             width=420,
@@ -135,9 +144,11 @@ class GUI:
             self.table.colheader.textcolor = 'black'
             self.table.rowselectedcolor='white',
 
+    # Redirects to online doc page.
     def open_online_documentation(self):
         webbrowser.open("https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md")
 
+    # Create the about window
     def create_about(self):
         self.about_window = ctk.CTkToplevel(master=self.WINDOW)
         self.about_window.transient(self.WINDOW)
@@ -170,7 +181,7 @@ in text files through an intuitive Tkinter interface."""
         )
         self.about_desc.pack()
 
-    # Pop-ups to send messages to the user
+    # Notfications to the user
     def push_notification(self, pop_type : "error | info | success", message : str): # type: ignore
         self.notification.destroy()
         colors = {
@@ -200,7 +211,8 @@ in text files through an intuitive Tkinter interface."""
             self.WINDOW.update()
             time.sleep(1/60)
 
-        time.sleep(1)
+        time.sleep(2)
+
         # Go Up
         while self.notification_y > 0:
             self.notification_y -= 4
@@ -209,7 +221,6 @@ in text files through an intuitive Tkinter interface."""
             time.sleep(1/60)
 
         self.notification.destroy()
-
 
     # Change program theme to Dark
     def dark_theme(self):
@@ -245,6 +256,7 @@ in text files through an intuitive Tkinter interface."""
 
         self.render_table()
 
+    # Hide/Show Menubar
     def toggle_menubar(self, *args):
         if self.menubar.winfo_exists():
             self.menubar.destroy()
@@ -256,6 +268,7 @@ in text files through an intuitive Tkinter interface."""
         else:
             self.light_theme()
 
+    # Light becomes Dark; Dark becomes Light
     def toggle_themes(self):
         if ctk.AppearanceModeTracker.appearance_mode:
             self.light_theme()
@@ -263,3 +276,15 @@ in text files through an intuitive Tkinter interface."""
         else:
             self.dark_theme()
             self.switch.configure(text='Dark')
+
+    # Changes the search pattern to set table data.
+    def create_regex_entry(self):
+        self.regex_entry = ctk.CTkEntry(master=self.WINDOW)
+        self.regex_entry.place(anchor=tk.W, relx=0.54, rely=0.84)
+        self.regex_set = ctk.CTkButton(
+            master=self.WINDOW,
+            text='Set',
+            command=self.change_regex,
+            width=10
+        )
+        self.regex_set.place(anchor=tk.W, relx=0.779, rely=0.84)

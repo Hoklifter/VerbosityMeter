@@ -1,7 +1,7 @@
 from tkinter import filedialog
 import os.path
 from unidecode import unidecode
-from re import findall
+import re
 from collections import Counter
 from pandas import DataFrame
 
@@ -9,8 +9,9 @@ from pandas import DataFrame
 class FUN:
     def __init__(self) -> None:
         # DataFrame data
-        self.data = 'None'
+        self.regex = r"[a-zA-Z]+"
 
+    # Generate a new file with the table data on it.
     def get_filepath(self):
         filepath = filedialog.askopenfilename(
             initialdir=os.path.expanduser("~"),
@@ -26,7 +27,7 @@ class FUN:
 
         with open(filepath) as textfile:
             for line in textfile:
-                words = findall(r"[a-zA-Z]+", unidecode(line.upper()))
+                words = re.findall(self.regex, unidecode(line.upper()))
                 word_counter.update(words)
 
         most_common_words = word_counter.most_common(10)
@@ -35,16 +36,15 @@ class FUN:
                 most_common_words,
                 columns=["Word", "Frequency"]
             )
-
             self.render_table()
             self.push_notification('info', f"{os.path.basename(filepath)!r} Opened")
         else:
-            self.push_notification("error", f"{os.path.basename(filepath)!r} is empty or has no words on it.")
-
+            self.push_notification("error", f"{os.path.basename(filepath)!r} is empty or has no matches.")
 
     # Generate a new file with the table data on it.
     def export_table(self):
-        if isinstance(self.data, DataFrame):
+        try:
+            self.data
             file = filedialog.asksaveasfile(
                 initialdir=os.path.expanduser("~"),
                 title="Save as...",
@@ -55,8 +55,20 @@ class FUN:
             else:
                 file.write(self.data.to_string())
 
-
             self.push_notification("success", f"{os.path.basename(file.name)} has been saved succesfully.")
 
-        else:
+        except AttributeError:
             self.push_notification("error", "No table generated.")
+
+
+    # Changes the search pattern to set table data.
+    def change_regex(self):
+        if self.regex_entry.get():
+            try:
+                re.compile(self.regex_entry.get())
+                self.regex = self.regex_entry.get()
+                self.push_notification('info', f'New RegEx Pattern: {self.regex!r}')
+            except re.error:
+                self.push_notification('error', 'Invalid RegEx pattern')
+        else:
+            self.push_notification('error', 'Empty pattern.')

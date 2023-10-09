@@ -1,8 +1,6 @@
 # TO-DO
 
-#     User input RegEx (
-#
-#     )
+
 
 from gui import GUI
 from fun import FUN
