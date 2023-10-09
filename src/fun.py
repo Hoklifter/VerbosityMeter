@@ -25,41 +25,42 @@ class FUN:
         filepath = self.get_filepath()
         word_counter = Counter()
 
-        with open(filepath) as textfile:
-            for line in textfile:
-                words = re.findall(self.regex, unidecode(line.upper()))
-                word_counter.update(words)
+        if filepath:
+            with open(filepath) as textfile:
+                for line in textfile:
+                    words = re.findall(self.regex, unidecode(line.upper()))
+                    word_counter.update(words)
 
-        most_common_words = word_counter.most_common(10)
-        if most_common_words:
-            self.data = DataFrame(
-                most_common_words,
-                columns=["Word", "Frequency"]
-            )
-            self.render_table()
-            self.push_notification('info', f"{os.path.basename(filepath)!r} Opened")
-        else:
-            self.push_notification("error", f"{os.path.basename(filepath)!r} is empty or has no matches.")
+            most_common_words = word_counter.most_common(10)
+            if most_common_words:
+                self.data = DataFrame(
+                    most_common_words,
+                    columns=["Word", "Frequency"]
+                )
+                self.render_table()
+                self.push_notification('info', f"{os.path.basename(filepath)!r} Opened")
+            else:
+                self.push_notification("error", f"{os.path.basename(filepath)!r} is empty or has no matches.")
 
     # Generate a new file with the table data on it.
     def export_table(self):
         try:
             self.data
-            file = filedialog.asksaveasfile(
-                initialdir=os.path.expanduser("~"),
-                title="Save as...",
-                filetypes=[("Text File", ".txt"), ("CSV File", ".csv")]
-            )
+        except AttributeError:
+            self.push_notification("error", "No table generated.")
+            return
+        file = filedialog.asksaveasfile(
+            initialdir=os.path.expanduser("~"),
+            title="Save as...",
+            filetypes=[("Text File", ".txt"), ("CSV File", ".csv")]
+        )
+        if file:
             if os.path.splitext(file.name)[1] == ".csv":
                 file.write(self.data.to_csv())
             else:
                 file.write(self.data.to_string())
 
             self.push_notification("success", f"{os.path.basename(file.name)} has been saved succesfully.")
-
-        except AttributeError:
-            self.push_notification("error", "No table generated.")
-
 
     # Changes the search pattern to set table data.
     def change_regex(self):

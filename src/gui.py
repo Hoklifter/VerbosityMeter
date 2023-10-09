@@ -263,10 +263,13 @@ in text files through an intuitive Tkinter interface."""
         else:
             self.setup_menubar()
 
-        if ctk.AppearanceModeTracker.appearance_mode:
-            self.dark_theme()
-        else:
-            self.light_theme()
+        try:
+            if ctk.AppearanceModeTracker.appearance_mode:
+                self.dark_theme()
+            else:
+                self.light_theme()
+        except tk.TclError:
+            pass
 
     # Light becomes Dark; Dark becomes Light
     def toggle_themes(self):
