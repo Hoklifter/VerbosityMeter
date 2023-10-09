@@ -1,3 +1,4 @@
 customtkinter
 pandas
 pandastable
+unidecode
