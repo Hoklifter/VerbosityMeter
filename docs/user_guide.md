@@ -30,7 +30,37 @@ This Tkinter application is designed to generate a table displaying the most com
 - Export the generated table in a specified format.
 
 ## Installation <a name="installation"></a>
-[Include installation instructions here]
+### 1. Be sure to have [Python](https://www.python.org/download/releases/) installed.
+
+
+### 2. Download ZIP or clone the repository:
+```
+git clone https://github.com/Hoklifter/VerbosityMeter.git
+```
+
+
+### 3. Go to Repository Directory
+```
+cd VerbosityMeter
+```
+
+
+### 4. Install dependencies:
+### Linux
+```
+python3 -m pip install -r requirements.txt
+```
+### Windows
+```
+py -m pip install -r requirements.txt
+```
+
+
+### 5. Run the program:
+
+```
+python3 src/main.py
+```
 
 ## User Interface <a name="user-interface"></a>
 
@@ -42,13 +72,12 @@ The menubar contains various options for controlling the application. It include
 
 #### File Menu <a name="file-menu"></a>
 - **Open File**: Allows you to open a file for analysis.
+- **Export table as**: Generates a new file with Table Data on it.
 - **Exit**: Closes the application.
 
 #### View Menu <a name="view-menu"></a>
 - **Hide Menubar**: Toggles the visibility of the menubar.
-
-#### Appearance Menu <a name="appearance-menu"></a>
-- **App Themes**: Provides options to change the appearance of the application.
+- **Theme**: Provides options to change the appearance of the application.
 
 #### Help Menu <a name="help-menu"></a>
 - **Documentation**: Opens the documentation for the application.
@@ -68,11 +97,9 @@ The menubar contains various options for controlling the application. It include
 1. In the menubar, go to **File > Export Table As**.
 2. Select the desired format (e.g., CSV, Excel) and specify the location to save the file.
 
-## App Themes <a name="app-themes"></a>
-[Include information about available app themes]
-
-## Troubleshooting <a name="troubleshooting"></a>
-[Include troubleshooting tips]
 
 ## About <a name="about"></a>
-[Include information about the developer or the application]
+-**By**   Kauã Queiroz
+-   queiroz-dev@outlook.com
+- [GitHub](https://github.com/Hoklifter/)
+- [LinkedIn](https://www.linkedin.com/in/kau%C3%A3-queiroz-5b7085278/)
