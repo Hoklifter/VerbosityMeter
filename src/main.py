@@ -1,8 +1,5 @@
 # TO-DO
 
-#     Error notification (
-#
-#     )
 #     User input RegEx (
 #
 #     )
@@ -13,6 +10,8 @@ from fun import FUN
 class VerbosityMeter(GUI, FUN):
     def __init__(self) -> None:
         super().__init__()
+        FUN.__init__(self)
+
 
 if __name__ == "__main__":
     ROOT = VerbosityMeter()

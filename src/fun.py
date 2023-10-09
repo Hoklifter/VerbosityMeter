@@ -1,5 +1,5 @@
 from tkinter import filedialog
-from os.path import expanduser, splitext
+import os.path
 from unidecode import unidecode
 from re import findall
 from collections import Counter
@@ -9,11 +9,11 @@ from pandas import DataFrame
 class FUN:
     def __init__(self) -> None:
         # DataFrame data
-        self.data = None
+        self.data = 'None'
 
     def get_filepath(self):
         filepath = filedialog.askopenfilename(
-            initialdir=expanduser("~"),
+            initialdir=os.path.expanduser("~"),
             title="Select a File.",
             filetypes=[("Text Files", ".txt"), ("Any Files", "*")]
         )
@@ -37,22 +37,26 @@ class FUN:
             )
 
             self.render_table()
+            self.push_notification('info', f"{os.path.basename(filepath)!r} Opened")
         else:
-            self.popup("error", "File is empty or has no words on it.")
+            self.push_notification("error", f"{os.path.basename(filepath)!r} is empty or has no words on it.")
+
 
     # Generate a new file with the table data on it.
-
     def export_table(self):
         if isinstance(self.data, DataFrame):
             file = filedialog.asksaveasfile(
-                initialdir=expanduser("~"),
+                initialdir=os.path.expanduser("~"),
                 title="Save as...",
                 filetypes=[("Text File", ".txt"), ("CSV File", ".csv")]
             )
-            if splitext(file.name)[1] == ".csv":
+            if os.path.splitext(file.name)[1] == ".csv":
                 file.write(self.data.to_csv())
             else:
                 file.write(self.data.to_string())
+
+
+            self.push_notification("success", f"{os.path.basename(file.name)} has been saved succesfully.")
+
         else:
-            print("No table generated.")
-            self.popup("error", "No table generated.")
+            self.push_notification("error", "No table generated.")

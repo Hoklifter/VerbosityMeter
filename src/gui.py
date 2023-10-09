@@ -1,6 +1,7 @@
 import webbrowser
 import PIL
 import tkinter as tk
+import time
 
 import customtkinter as ctk
 import pandastable as pdt
@@ -11,6 +12,8 @@ class GUI:
         self.setup_menubar()
         self.setup_main_interface()
         self.dark_theme()
+        self.notification = ctk.CTkLabel(master=self.WINDOW)
+
 
     def setup_WINDOW(self):
         # WINDOW
@@ -57,19 +60,15 @@ class GUI:
 
     def setup_main_interface(self):
         # Title
-        self.label = ctk.CTkTextbox(
+        self.label = ctk.CTkLabel(
             master=self.WINDOW,
-            activate_scrollbars=False,
-            wrap=tk.NONE,
-            font=(None, 12)
+            font=(None, 12),
+            text="Choose a file so that the program counts the most common words"
         )
-        self.label.insert(tk.END, "Choose a file so that the program counts the most common words")
         self.label.configure(
-            state="disabled",
             width=ctk.CTkFont().measure("Choose a file so that the program counts the most common words") + 41,
-            height=10,
         )
-        self.label.pack()
+        self.label.place(anchor=tk.N, relx=.5, rely=.0)
 
         # Button
         self.button = ctk.CTkButton(
@@ -78,7 +77,7 @@ class GUI:
             command=self.count_words,
             height=60
         )
-        self.button.pack(anchor=tk.N, pady=30)
+        self.button.place(anchor=tk.N, relx=.5, rely=.1)
 
         # Dataframe Frame
         self.table_frame = ctk.CTkFrame(
@@ -86,7 +85,7 @@ class GUI:
             width=500,
             height=300
         )
-        self.table_frame.pack(anchor=tk.CENTER)
+        self.table_frame.place(anchor=tk.N, relx=.5, rely=.25)
 
         # Theme Switch
         self.switch = ctk.CTkSwitch(
@@ -96,17 +95,18 @@ class GUI:
             switch_width=50,
             switch_height=25
         )
-        self.switch.pack(anchor=tk.SW, ipady=30, padx=50)
+        self.switch.place(anchor=tk.N, relx=.16, rely=.85)
 
     def render_table(self):
         try:
             self.data
         except AttributeError:
             return
+
         self.table = pdt.Table(
             parent=self.table_frame,
             dataframe=self.data,
-            cellbackgr='#212121',
+            cellbackgr='#111111',
             textcolor='white',
             rowselectedcolor='black',
             editable=False,
@@ -118,11 +118,12 @@ class GUI:
         )
         self.table.boxoutlinecolor='grey'
         self.table.grid_color = 'grey'
+        self.table.hideRowHeader()
         self.table.show()
 
-        self.table.rowheader.bgcolor = '#212121'
+        self.table.rowheader.bgcolor = '#111111'
         self.table.rowheader.textcolor = 'white'
-        self.table.colheader.bgcolor = '#212121'
+        self.table.colheader.bgcolor = '#111111'
         self.table.colheader.textcolor = 'white'
 
         if not ctk.AppearanceModeTracker.get_mode():
@@ -133,7 +134,6 @@ class GUI:
             self.table.colheader.bgcolor = 'lightgray'
             self.table.colheader.textcolor = 'black'
             self.table.rowselectedcolor='white',
-
 
     def open_online_documentation(self):
         webbrowser.open("https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md")
@@ -171,14 +171,45 @@ in text files through an intuitive Tkinter interface."""
         self.about_desc.pack()
 
     # Pop-ups to send messages to the user
-    def popup(self, type, message):
+    def push_notification(self, pop_type : "error | info | success", message : str): # type: ignore
+        self.notification.destroy()
         colors = {
-            "error": "#FF0000",  # Red
-            "warning": "#FFFF00",  # Yellow
-            "success": "#00FF00",  # Green
+            "error": "#cc0000",
+            "info": "#1e92f4",
+            "success": "#00cc00",
         }
 
-        pass
+        self.notification = ctk.CTkLabel(master=self.WINDOW)
+
+        self.notification.configure(
+            text=f"{pop_type.capitalize()}: {message}",
+            font=(None, 18),
+            fg_color=colors[pop_type],
+            text_color='white',
+            width=400,
+            height=20,
+            corner_radius=20
+        )
+
+        self.notification_y = 0
+
+        # Go Down
+        while self.notification_y < 50:
+            self.notification_y += 4
+            self.notification.place(y=self.notification_y, relx=.5, anchor=tk.S)
+            self.WINDOW.update()
+            time.sleep(1/60)
+
+        time.sleep(1)
+        # Go Up
+        while self.notification_y > 0:
+            self.notification_y -= 4
+            self.notification.place(y=self.notification_y, relx=.5, anchor=tk.S)
+            self.WINDOW.update()
+            time.sleep(1/60)
+
+        self.notification.destroy()
+
 
     # Change program theme to Dark
     def dark_theme(self):
