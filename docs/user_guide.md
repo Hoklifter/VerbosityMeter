@@ -22,7 +22,7 @@
 ---
 
 ## Introduction <a name="introduction"></a>
-This Tkinter application is designed to generate a table displaying the most common words in a given file. It provides a user-friendly interface with various functionalities to facilitate the process.
+VerbosityMeter is designed to generate a table displaying the most common words in a given file. It provides a user-friendly interface with various functionalities to facilitate the process.
 
 ## Features <a name="features"></a>
 - Open a file to analyze its content.
