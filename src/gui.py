@@ -6,6 +6,7 @@ import time
 import customtkinter as ctk
 import pandastable as pdt
 
+
 class GUI:
     def __init__(self) -> None:
         self.setup_WINDOW()
@@ -14,17 +15,16 @@ class GUI:
         self.dark_theme()
         self.notification = ctk.CTkLabel(master=self.WINDOW)
 
-
     def setup_WINDOW(self):
         # WINDOW
         self.WINDOW = ctk.CTk()
-        iconpng = tk.PhotoImage(file="../assets/icons/icon256x256.png")
+        # iconpng = tk.PhotoImage(file="../assets/icons/icon256x256.png")
         self.WINDOW.title("VerbosityMeter")
         self.WINDOW.geometry("600x550")
         self.WINDOW.resizable(False, False)
-        self.WINDOW.iconphoto(False, iconpng)
+        # self.WINDOW.iconphoto(False, iconpng)
         self.WINDOW.bind("<Alt_L>", self.toggle_menubar)
-        self.WINDOW.attributes('-topmost', 1)
+        self.WINDOW.attributes("-topmost", 1)
 
     def setup_menubar(self):
         # MENUBAR
@@ -33,24 +33,28 @@ class GUI:
         # FILE
         self.file_menubar = tk.Menu(self.menubar, tearoff=False)
         self.file_menubar.add_command(label="Open File...", command=self.count_words)
-        self.file_menubar.add_command(label="Export table as...", command=self.export_table)
+        self.file_menubar.add_command(
+            label="Export table as...", command=self.export_table
+        )
         self.file_menubar.add_command(label="Exit", command=quit)
 
         # VIEW
         self.view_menubar = tk.Menu(self.menubar, tearoff=False)
-        self.view_menubar.add_command(label="Hide menubar", accelerator="Alt", command=self.toggle_menubar)
+        self.view_menubar.add_command(
+            label="Hide menubar", accelerator="Alt", command=self.toggle_menubar
+        )
         self.view_theme_menubar = tk.Menu(self.view_menubar, tearoff=False)
         self.view_theme_menubar.add_command(label="Dark", command=self.dark_theme)
         self.view_theme_menubar.add_command(label="Light", command=self.light_theme)
 
         self.view_menubar.add_cascade(label="Theme", menu=self.view_theme_menubar)
 
-
         # HELP
-        self.help_menubar_menu = tk.Menu(self.menubar,tearoff=False)
-        self.help_menubar_menu.add_command(label="Documentation", command=self.open_online_documentation)
+        self.help_menubar_menu = tk.Menu(self.menubar, tearoff=False)
+        self.help_menubar_menu.add_command(
+            label="Documentation", command=self.open_online_documentation
+        )
         self.help_menubar_menu.add_command(label="About", command=self.create_about)
-
 
         self.menubar.add_cascade(label="File", menu=self.file_menubar)
         self.menubar.add_cascade(label="View", menu=self.view_menubar)
@@ -63,46 +67,42 @@ class GUI:
         self.label = ctk.CTkLabel(
             master=self.WINDOW,
             font=(None, 12),
-            text="Choose a file so that the program counts the most common words"
+            text="Choose a file so that the program counts the most common words",
         )
         self.label.configure(
-            width=ctk.CTkFont().measure("Choose a file so that the program counts the most common words") + 41,
+            width=ctk.CTkFont().measure(
+                "Choose a file so that the program counts the most common words"
+            )
+            + 41,
         )
-        self.label.place(anchor=tk.N, relx=.5, rely=.0)
+        self.label.place(anchor=tk.N, relx=0.5, rely=0.0)
 
         # Button
         self.button = ctk.CTkButton(
-            master=self.WINDOW,
-            text="Open File...",
-            command=self.count_words,
-            height=60
+            master=self.WINDOW, text="Open File...", command=self.count_words, height=60
         )
-        self.button.place(anchor=tk.N, relx=.5, rely=.1)
+        self.button.place(anchor=tk.N, relx=0.5, rely=0.1)
 
         # Dataframe Frame
-        self.table_frame = ctk.CTkFrame(
-            master=self.WINDOW,
-            width=500,
-            height=300
-        )
-        self.table_frame.place(anchor=tk.N, relx=.5, rely=.25)
+        self.table_frame = ctk.CTkFrame(master=self.WINDOW, width=500, height=300)
+        self.table_frame.place(anchor=tk.N, relx=0.5, rely=0.25)
 
         # Theme Switch
         self.switch = ctk.CTkSwitch(
             self.WINDOW,
             command=self.toggle_themes,
-            text='Dark',
+            text="Dark",
             switch_width=50,
-            switch_height=25
+            switch_height=25,
         )
-        self.switch.place(anchor=tk.N, relx=.16, rely=.82)
+        self.switch.place(anchor=tk.N, relx=0.16, rely=0.82)
 
         # RegEx Entry button
         self.regex_button = ctk.CTkButton(
             master=self.WINDOW,
             text="RegEx...",
             command=self.create_regex_entry,
-            height=30
+            height=30,
         )
         self.regex_button.place(anchor=tk.W, relx=0.3, rely=0.84)
 
@@ -116,37 +116,39 @@ class GUI:
         self.table = pdt.Table(
             parent=self.table_frame,
             dataframe=self.data,
-            cellbackgr='#111111',
-            textcolor='white',
-            rowselectedcolor='black',
+            cellbackgr="#111111",
+            textcolor="white",
+            rowselectedcolor="black",
             editable=False,
             cellwidth=200,
             rowheight=25,
             width=420,
             height=250,
         )
-        self.table.boxoutlinecolor='grey'
-        self.table.grid_color = 'grey'
+        self.table.boxoutlinecolor = "grey"
+        self.table.grid_color = "grey"
         self.table.hideRowHeader()
         self.table.show()
 
-        self.table.rowheader.bgcolor = '#111111'
-        self.table.rowheader.textcolor = 'white'
-        self.table.colheader.bgcolor = '#111111'
-        self.table.colheader.textcolor = 'white'
+        self.table.rowheader.bgcolor = "#111111"
+        self.table.rowheader.textcolor = "white"
+        self.table.colheader.bgcolor = "#111111"
+        self.table.colheader.textcolor = "white"
 
         if not ctk.AppearanceModeTracker.get_mode():
-            self.table.textcolor = 'black'
-            self.table.cellbackgr = 'lightgray',
-            self.table.rowheader.bgcolor = 'lightgray'
-            self.table.rowheader.textcolor = 'black'
-            self.table.colheader.bgcolor = 'lightgray'
-            self.table.colheader.textcolor = 'black'
-            self.table.rowselectedcolor='white',
+            self.table.textcolor = "black"
+            self.table.cellbackgr = ("lightgray",)
+            self.table.rowheader.bgcolor = "lightgray"
+            self.table.rowheader.textcolor = "black"
+            self.table.colheader.bgcolor = "lightgray"
+            self.table.colheader.textcolor = "black"
+            self.table.rowselectedcolor = ("white",)
 
     # Redirects to online doc page.
     def open_online_documentation(self):
-        webbrowser.open("https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md")
+        webbrowser.open(
+            "https://github.com/Hoklifter/VerbosityMeter/tree/main/docs/user_guide.md"
+        )
 
     # Create the about window
     def create_about(self):
@@ -158,16 +160,16 @@ class GUI:
 
         self.about_img = ctk.CTkLabel(
             self.about_window,
-            image=ctk.CTkImage(PIL.Image.open("../assets/icons/icon2048x2048.png"), None, (150, 150)),
+            image=ctk.CTkImage(
+                PIL.Image.open("../assets/icons/icon2048x2048.png"), None, (150, 150)
+            ),
             text="",
-            height=170
+            height=170,
         )
         self.about_img.pack()
 
         self.about_title = ctk.CTkLabel(
-            self.about_window,
-            text="VerbosityMeter",
-            font=ctk.CTkFont(weight="bold")
+            self.about_window, text="VerbosityMeter", font=ctk.CTkFont(weight="bold")
         )
         self.about_title.pack()
 
@@ -177,12 +179,12 @@ class GUI:
         self.about_desc = ctk.CTkLabel(
             self.about_window,
             text="""Verbosity Meter simplifies the analysis of word frequencies
-in text files through an intuitive Tkinter interface."""
+in text files through an intuitive Tkinter interface.""",
         )
         self.about_desc.pack()
 
     # Notfications to the user
-    def push_notification(self, pop_type : "error | info | success", message : str): # type: ignore
+    def push_notification(self, pop_type: "error | info | success", message: str):  # type: ignore
         self.notification.destroy()
         colors = {
             "error": "#cc0000",
@@ -196,10 +198,10 @@ in text files through an intuitive Tkinter interface."""
             text=f"{pop_type.capitalize()}: {message}",
             font=(None, 18),
             fg_color=colors[pop_type],
-            text_color='white',
+            text_color="white",
             width=400,
             height=20,
-            corner_radius=20
+            corner_radius=20,
         )
 
         self.notification_y = 0
@@ -207,18 +209,18 @@ in text files through an intuitive Tkinter interface."""
         # Go Down
         while self.notification_y < 50:
             self.notification_y += 4
-            self.notification.place(y=self.notification_y, relx=.5, anchor=tk.S)
+            self.notification.place(y=self.notification_y, relx=0.5, anchor=tk.S)
             self.WINDOW.update()
-            time.sleep(1/60)
+            time.sleep(1 / 60)
 
         time.sleep(2)
 
         # Go Up
         while self.notification_y > 0:
             self.notification_y -= 4
-            self.notification.place(y=self.notification_y, relx=.5, anchor=tk.S)
+            self.notification.place(y=self.notification_y, relx=0.5, anchor=tk.S)
             self.WINDOW.update()
-            time.sleep(1/60)
+            time.sleep(1 / 60)
 
         self.notification.destroy()
 
@@ -275,19 +277,16 @@ in text files through an intuitive Tkinter interface."""
     def toggle_themes(self):
         if ctk.AppearanceModeTracker.appearance_mode:
             self.light_theme()
-            self.switch.configure(text='Light')
+            self.switch.configure(text="Light")
         else:
             self.dark_theme()
-            self.switch.configure(text='Dark')
+            self.switch.configure(text="Dark")
 
     # Changes the search pattern to set table data.
     def create_regex_entry(self):
         self.regex_entry = ctk.CTkEntry(master=self.WINDOW)
         self.regex_entry.place(anchor=tk.W, relx=0.54, rely=0.84)
         self.regex_set = ctk.CTkButton(
-            master=self.WINDOW,
-            text='Set',
-            command=self.change_regex,
-            width=10
+            master=self.WINDOW, text="Set", command=self.change_regex, width=10
         )
         self.regex_set.place(anchor=tk.W, relx=0.779, rely=0.84)
