@@ -2,6 +2,7 @@ import webbrowser
 import PIL
 import tkinter as tk
 import time
+import os
 
 import customtkinter as ctk
 import pandastable as pdt
@@ -18,7 +19,11 @@ class GUI:
     def setup_WINDOW(self):
         # WINDOW
         self.WINDOW = ctk.CTk()
-        iconpng = tk.PhotoImage(file="../assets/icons/icon256x256.png")
+        if os.name == 'posix':
+            iconpng = tk.PhotoImage(file="../assets/icons/icon256x256.png")
+        elif os.name == 'nt':
+            iconpng = tk.PhotoImage(file="..\\assets\\icons\\icon256x256.png")
+
         self.WINDOW.title("VerbosityMeter")
         self.WINDOW.geometry("600x550")
         self.WINDOW.resizable(False, False)
@@ -156,9 +161,15 @@ class GUI:
         self.about_window.geometry("500x300")
         self.about_window.resizable(False, False)
 
+        if os.name == 'posix':
+            aboutpng = PIL.Image.open("../assets/icons/icon2048x2048.png"),
+        elif os.name == 'nt':
+            aboutpng = PIL.Image.open("..\\assets\\icons\\icon2048x2048.png"),
+
+
         self.about_img = ctk.CTkLabel(
             self.about_window,
-            image=ctk.CTkImage(PIL.Image.open("../assets/icons/icon2048x2048.png"), None, (150, 150)),
+            image=ctk.CTkImage(aboutpng, None, (150, 150)),
             text="",
             height=170
         )
