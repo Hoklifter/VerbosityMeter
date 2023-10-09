@@ -28,8 +28,11 @@ py -m pip install -r requirements.txt
 ```
 
 
+
 ### 5. Run the program:
 
 ```
 python3 src/main.py
 ```
+
+For more info, check out the [documentation](https://github.com/Hoklifter/VerbosityMeter/blob/main/docs/user_guide.md)
