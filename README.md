@@ -1,6 +1,10 @@
 # VerbosityMeter
 Python software that will table the most common words in a given text.
 
+
+https://github.com/Hoklifter/VerbosityMeter/assets/114830688/09c2d657-c1f2-4e9c-b8e4-1cf4f549735b
+
+
 ## Installation <a name="installation"></a>
 ### 1. Be sure to have [Python](https://www.python.org/download/releases/) installed.
 
