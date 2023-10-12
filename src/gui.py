@@ -29,7 +29,7 @@ class GUI:
         self.WINDOW.resizable(False, False)
         self.WINDOW.iconphoto(False, iconpng)
         self.WINDOW.bind("<Alt_L>", self.toggle_menubar)
-        self.WINDOW.attributes('-topmost', 1)
+        # self.WINDOW.attributes('-topmost', 1)
 
     def setup_menubar(self):
         # MENUBAR
@@ -162,9 +162,9 @@ class GUI:
         self.about_window.resizable(False, False)
 
         if os.name == 'posix':
-            aboutpng = PIL.Image.open("../assets/icons/icon2048x2048.png"),
+            aboutpng = PIL.Image.open("../assets/icons/icon2048x2048.png")
         elif os.name == 'nt':
-            aboutpng = PIL.Image.open("..\\assets\\icons\\icon2048x2048.png"),
+            aboutpng = PIL.Image.open("..\\assets\\icons\\icon2048x2048.png")
 
 
         self.about_img = ctk.CTkLabel(
