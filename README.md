@@ -1,8 +1,7 @@
 ![icon256x256](https://github.com/Hoklifter/VerbosityMeter/assets/114830688/1a38f5ae-5be3-4842-b94b-51cc42640b7e)
 
 # VerbosityMeter
-Python software that will table the most common words in a given text.
-
+Python software that will count, table and export the most common words in a given textfile.
 
 https://github.com/Hoklifter/VerbosityMeter/assets/114830688/09c2d657-c1f2-4e9c-b8e4-1cf4f549735b
 
